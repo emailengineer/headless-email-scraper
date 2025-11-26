@@ -79,31 +79,28 @@ curl "http://<VPS-IP>:8000/result/<job_id>"
 }
 ```
 
-Configuration
+## Configuration
 
-Max pages per crawl: 10 (set in scraper.py via MAX_PAGES)
-
-Concurrency: 3 pages at a time (CONCURRENCY)
-
-Cache TTL: 24 hours (CACHE_TTL)
-
-Timeout per page: 15 seconds (PAGE_TIMEOUT)
-
-Retries per page: 2 (RETRIES)
+- **Max pages per crawl:** 10 (set in scraper.py via MAX_PAGES)
+- **Concurrency:** 3 pages at a time (CONCURRENCY)
+- **Cache TTL:** 24 hours (CACHE_TTL)
+- **Timeout per page:** 15 seconds (PAGE_TIMEOUT)
+- **Retries per page:** 2 (RETRIES)
 
 All parameters can be adjusted in scraper.py.
 
-Stopping Services
+## Stopping Services
+
+```bash
 docker-compose down
+```
 
-Notes
+## Notes
 
-Ensure the VPS has enough RAM (~1-2 GB recommended) for Playwright Chromium instances.
+- Ensure the VPS has enough RAM (~1-2 GB recommended) for Playwright Chromium instances.
+- Redis caching prevents re-scraping the same URL multiple times within the TTL.
+- Avoid crawling sites aggressively; respect site policies and robots.txt.
 
-Redis caching prevents re-scraping the same URL multiple times within the TTL.
-
-Avoid crawling sites aggressively; respect site policies and robots.txt.
-
-License
+## License
 
 MIT License – free to use and modify.
