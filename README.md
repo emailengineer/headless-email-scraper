@@ -1,75 +1,83 @@
-Headless Email Scraper API
+# Headless Email Scraper API
 
 A headless, concurrent email scraper with caching, retries, and API access. Built with FastAPI, Playwright, Redis, and RQ, fully Docker-ready for one-click deployment.
 
-Features
+## Features
 
-Crawl root page + up to 10 internal pages
+- Crawl root page + up to 10 internal pages
+- Extract emails concurrently (configurable concurrency)
+- Handles timeouts and automatic retries
+- Cache results in Redis for 24 hours
+- Simple API for job submission and results retrieval
+- Fully containerized with Docker & Docker Compose
 
-Extract emails concurrently (configurable concurrency)
+## Requirements
 
-Handles timeouts and automatic retries
+- Ubuntu 20.04+ (or any Linux VPS)
+- Docker
+- Docker Compose
 
-Cache results in Redis for 24 hours
+## Quick Start (One-Click VPS Deployment)
 
-Simple API for job submission and results retrieval
+### 1. Install Docker & Docker Compose
 
-Fully containerized with Docker & Docker Compose
-
-Requirements
-
-Ubuntu 20.04+ (or any Linux VPS)
-
-Docker
-
-Docker Compose
-
-Quick Start (One-Click VPS Deployment)
-1. Install Docker & Docker Compose
+```bash
 sudo apt update
 sudo apt install -y docker.io docker-compose
 sudo systemctl enable docker
 sudo systemctl start docker
+```
 
-2. Clone the Repository
+### 2. Clone the Repository
+
+```bash
 git clone https://github.com/emailengineer/headless-email-scraper.git
 cd headless-email-scraper
+```
 
-3. Start the Services
+### 3. Start the Services
+
+```bash
 docker-compose up --build -d
-
+```
 
 This will start three containers:
 
-scraper_api → FastAPI API server (port 8000)
+- **scraper_api** → FastAPI API server (port 8000)
+- **scraper_worker** → Background scraping worker
+- **scraper_redis** → Redis for caching and job queue
 
-scraper_worker → Background scraping worker
+### 4. Submit a Crawl Job
 
-scraper_redis → Redis for caching and job queue
-
-4. Submit a Crawl Job
+```bash
 curl -X POST "http://<VPS-IP>:8000/crawl" \
      -H "Content-Type: application/json" \
      -d '{"url": "https://example.com"}'
+```
 
+**Response:**
 
-Response:
-
+```json
 {
   "job_id": "123e4567-e89b-12d3-a456-426614174000",
   "status": "queued"
 }
+```
 
-5. Check Job Result
+### 5. Check Job Result
+
+```bash
 curl "http://<VPS-IP>:8000/result/<job_id>"
+```
 
+**Response (example):**
 
-Response (example):
-
+```json
 {
   "job_id": "123e4567-e89b-12d3-a456-426614174000",
   "emails": ["contact@example.com", "support@example.com"]
 }
+```
 
 Configuration
 
